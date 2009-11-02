@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+	<TITLE>ISyE 6663 Computer Project</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="White" TEXT="Black" LINK="Navy" VLINK="Navy" ALINK="White">
+<CENTER>
+<FONT SIZE="+2">
+ISyE 6663 Computer Project
+</FONT></CENTER>
+
+<P><P>
+<HR ALIGN="CENTER" SIZE="5" WIDTH="70%">
+
+<UL>
+<LI><B><A HREF="func1.m">func1.m</A>, <A HREF="grad1.m">grad1.m</A></B>
+<BR><BR>
+These are the function and gradient evaluation subroutines
+for a particular function called the Rosenbrock function. Both
+take two arguments: (1) the dimension n of the input column vector;
+(2) the input column vector.
+<BR><BR>
+<LI><B><A HREF="func.m">func.m</A>, <A HREF="grad.m">grad.m</A></B>
+<BR><BR>
+These are the generic function and gradient evaluation subroutines.
+Both take three arguments: (1) the dimension n of the input column vector;
+(2) the input column vector; (3) the problem number (which references
+a list of problems stored in func.m and grad.m).
+<BR><BR>
+For example, func1.m and grad1.m are defined as problem 1 in func.m
+and grad.m. So the call func(n, x, 1) will return func1(n, x). This
+provides a way of accessing different problem examples without
+directly editing the algorithm or linesearch code to reflect the
+specific choice of problem.
+<BR><BR>
+<LI><B><A HREF="linesearch.m">linesearch.m</A></B>,
+<B><A HREF="bracketing.m">bracketing.m</A></B>,
+<B><A HREF="sectioning.m">sectioning.m</A></B>,
+<B><A HREF="interpolation.m">interpolation.m</A></B>
+<BR><BR>
+These files constitute the linesearch subroutine, with
+linesearch.m being the routine called directly by the user.
+This linesearch subroutine is appropriate for a minimization problem, not a
+maximization problem. Its format is
+<CENTER><PRE>[retcode, ax, af, ag, alpha] = linesearch(n, x, f, g, dir, initalpha, prob);</PRE></CENTER>
+where (a) the inputs are n (the problem dimension), x (the input column vector),
+f (the function value at x), g (the gradient at x),
+dir (the direction of movement), initalpha (the initial
+choice of stepsize) and prob (the problem number) and where (b)
+the outputs are retcode (the subroutine return code), ax (the
+new solution vector), af (the function value at ax), ag (the gradient
+at ax) and alpha (the stepsize chosen by the linesearch algorithm).
+<BR><BR>
+If the return code is -1, then the linesearch has failed, and its
+output should be ignored.
+<BR><BR>
+Please let me know if you find any bugs in this subroutine.
+<BR><BR>
+<LI><B><A HREF="stdesc.m">stdesc.m</A></B>
+<BR><BR>
+This is a steepest descent method which combines all of the
+above files. Put all the files in your Matlab working directory
+and try
+<CENTER><PRE>[optsoln, optval] = stdesc(4, [0; 0; 0; 0], 500, 1);</PRE></CENTER>
+at the Matlab command line. Here, 4 is the problem dimension,
+[0; 0; 0; 0] is the initial starting point, 500 is the number
+of iterations and 1 is the problem type.
+<BR><BR>
+<LI><B><A HREF="linesearch.tar">linesearch.tar</A></B>
+<BR><BR>
+This is a .tar file containing linesearch subroutines. You will have
+to find out by yourself how it works!
+</UL>
+</BODY>
+</HTML>
