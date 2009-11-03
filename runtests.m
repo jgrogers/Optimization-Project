@@ -1,4 +1,4 @@
-sz = 20;
+sz = 10;
 %[Q,b,xs ] = GenerateQuadratic(sz);
 xo = rand(sz,1);%rand(sz, 1);
 
@@ -19,4 +19,7 @@ CGFR('rosenbrock','rosenbrock_grad',xo, 0.1)
 toc
 tic
 CGPR('rosenbrock','rosenbrock_grad',xo, 0.1)
+toc
+tic
+BFGS('rosenbrock','rosenbrock_grad',xo, 0.1)
 toc
