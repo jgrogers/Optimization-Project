@@ -16,4 +16,4 @@ while err > eps
     errs(iter)=err;
 end
 plot(errs);
-xk;
+xk

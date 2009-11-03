@@ -4,8 +4,13 @@ gk = feval(grad, prob, x0);
 pk = -gk;
 xk = x0;
 iter = 1;
+[width,height] = size(prob);
 while norm(gk) > eps
-    ak = feval(step, fn, prob, gk,pk, xk);
+    if mod(iter,width) == 0
+        pk = -gk;
+        xk
+    end
+    ak = feval(step, fn, prob, gk,-pk, xk);
     xkp1 = xk + ak*pk;
     gkp1 = feval(grad,prob, xkp1);
     bkp1 = gkp1'*gkp1 / (gk'*gk);
@@ -14,4 +19,4 @@ while norm(gk) > eps
     xk = xkp1;
     gk = gkp1;
 end
-xk;
+xk

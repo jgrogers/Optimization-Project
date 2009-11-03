@@ -3,4 +3,4 @@ function ak = ExactQuadraticLineSearch(fn, Qb,g, p, x)
 Q = Qb(:,1:cols-1);
 b = Qb(:,cols);
 
-ak = -g'*p / (p'*Q*p);
+ak = g'*p / (p'*Q*p);
