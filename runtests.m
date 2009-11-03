@@ -1,9 +1,9 @@
-sz = 2;
+sz = 20;
 %[Q,b,xs ] = GenerateQuadratic(sz);
 xo = rand(sz,1);%rand(sz, 1);
 
 tic 
-GD_inexact('rosenbrock', 'rosenbrock_grad', xo, 0.01)
+GD_inexact('rosenbrock', 'rosenbrock_grad', xo, 0.1)
 toc
 %tic
 %GD('EvaluateQuadratic','QuadraticGradient','ExactQuadraticLineSearch',[Q,b], xo, 0.001)
@@ -14,7 +14,9 @@ toc
 %tic
 %NM('EvaluateQuadratic','QuadraticGradient','QuadraticHessian',[Q,b], xo, 0.001)
 %toc
-figure
 tic
-CGFR('rosenbrock','rosenbrock_grad',xo, 0.01)
+CGFR('rosenbrock','rosenbrock_grad',xo, 0.1)
+toc
+tic
+CGPR('rosenbrock','rosenbrock_grad',xo, 0.1)
 toc

@@ -1,6 +1,6 @@
-function iter = CGFR(fn, grad, x0,eps)
-figure(2)
-title (sprintf('CG:Fletcher-Reeves - %s',fn));
+function iter = CGPR(fn, grad, x0,eps)
+figure(3)
+title (sprintf('CG:Polak-Ribiere - %s',fn));
 
 hold on
 fk = feval(fn, x0);
@@ -19,7 +19,7 @@ while norm(gk) > eps
     [retcode, ax, af, ag, alpha] = linesearch(fn,grad, width, xk, fk, gk, pk, 1.0, 1);
     xkp1 = xk + alpha*pk;
     gkp1 = feval(grad,xkp1);
-    bkp1 = gkp1'*gkp1 / (gk'*gk);
+    bkp1 = gkp1'*(gkp1-gk) / (gk'*gk);
     pk = -gkp1 + bkp1*pk;
     iter = iter + 1;
     xk = xkp1;
