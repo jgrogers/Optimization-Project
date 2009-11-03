@@ -18,4 +18,4 @@ while norm(feval(grad, xk)) > eps
     plot(errs);
 end
 plot(errs);
-xk;
+xk
