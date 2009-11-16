@@ -79,6 +79,6 @@ while norm(gk) > eps
     iter = iter + 1;
 end
 
-plot(errs);
+%plot(errs);
 xk
 hold off

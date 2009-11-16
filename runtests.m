@@ -1,11 +1,15 @@
 sz = 10;
 %[Q,b,xs ] = GenerateQuadratic(sz);
-xo = rand(sz,1);%rand(sz, 1);
-fn = 'rosenbrock';
+%fn = 'rosenbrock';
+fn = 'trignometric';
+start = sprintf('%s_start',fn);
 grad = sprintf('%s_grad',fn);
-tic 
-GD_inexact(fn, grad, xo, 0.1)
-toc
+soln = sprintf('%s_soln',fn);
+xo = feval(start, sz);%rand(sz,1);%rand(sz, 1);
+xf = feval(soln, sz)
+%tic 
+%GD_inexact(fn, grad, xo, 0.01)
+%toc
 %tic
 %GD('EvaluateQuadratic','QuadraticGradient','ExactQuadraticLineSearch',[Q,b], xo, 0.001)
 %toc
@@ -15,15 +19,15 @@ toc
 %tic
 %NM('EvaluateQuadratic','QuadraticGradient','QuadraticHessian',[Q,b], xo, 0.001)
 %toc
+%tic
+%CGFR(fn,grad,xo, 0.01)
+%toc
+%tic
+%CGPR(fn,grad,xo, 0.1)
+%toc
 tic
-CGFR(fn,grad,xo, 0.1)
+BFGS(fn,grad,xo, 0.0001)
 toc
-tic
-CGPR(fn,grad,xo, 0.1)
-toc
-tic
-BFGS(fn,grad,xo, 0.1)
-toc
-tic
-LimBFGS(fn,grad,xo, 0.1)
-toc
+%tic
+%LimBFGS(fn,grad,xo, 0.001)
+%toc
