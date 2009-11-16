@@ -8,7 +8,7 @@ soln = sprintf('%s_soln',fn);
 xo = feval(start, sz);%rand(sz,1);%rand(sz, 1);
 xf = feval(soln, sz)
 %tic 
-%GD_inexact(fn, grad, xo, 0.01)
+%GD_inexact(fn, grad, xo, 0.0000000001)
 %toc
 %tic
 %GD('EvaluateQuadratic','QuadraticGradient','ExactQuadraticLineSearch',[Q,b], xo, 0.001)
@@ -22,12 +22,12 @@ xf = feval(soln, sz)
 %tic
 %CGFR(fn,grad,xo, 0.01)
 %toc
-%tic
-%CGPR(fn,grad,xo, 0.1)
-%toc
 tic
-BFGS(fn,grad,xo, 0.0001)
+CGPR(fn,grad,xo, 0.000000001)
 toc
+%tic
+%BFGS(fn,grad,xo, 0.00000000000001)
+%toc
 %tic
 %LimBFGS(fn,grad,xo, 0.001)
 %toc

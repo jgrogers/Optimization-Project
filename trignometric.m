@@ -3,10 +3,7 @@
 function [fval] = trignometric(x)
 [n,w] = size(x);
 fval = 0;
-s1 = 0;
-for i = 1:n
-   s1 = s1 + cos(x(i));
-end
+s1 = sum(cos(x));
 for j = 1:n
     t = n + j - sin(x(j)) - s1 - j * cos(x(j));
     fval = fval + t*t;
