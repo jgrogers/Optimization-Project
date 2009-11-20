@@ -1,33 +1,37 @@
-sz = 10;
+sz = 8;
 %[Q,b,xs ] = GenerateQuadratic(sz);
 fn = 'rosenbrock';
 %fn = 'trignometric';
+%fn = 'wood';
+%fn = 'quadratic';
 start = sprintf('%s_start',fn);
 grad = sprintf('%s_grad',fn);
 soln = sprintf('%s_soln',fn);
 xo = feval(start, sz);%rand(sz,1);%rand(sz, 1);
 xf = feval(soln, sz)
-%tic 
-%GD_inexact(fn, grad, xo, 0.0000000001)
+eta = 1e-6;
+tic 
+GD_inexact(fn, grad, xo, eta)
+toc
+%tic
+%GD('EvaluateQuadratic','QuadraticGradient','ExactQuadraticLineSearch',[Q,b], xo, eta)
 %toc
 %tic
-%GD('EvaluateQuadratic','QuadraticGradient','ExactQuadraticLineSearch',[Q,b], xo, 0.001)
+%GD('EvaluateQuadratic','QuadraticGradient','ArmijoRule',[Q,b], xo, eta)
 %toc
 %tic
-%GD('EvaluateQuadratic','QuadraticGradient','ArmijoRule',[Q,b], xo, 0.001)
-%toc
-%tic
-%NM('EvaluateQuadratic','QuadraticGradient','QuadraticHessian',[Q,b], xo, 0.001)
-%toc
-%tic
-%CGFR(fn,grad,xo, 0.01)
-%toc
-%tic
-%CGPR(fn,grad,xo, 0.000000001)
-%toc
-%tic
-%BFGS(fn,grad,xo, 0.00000000000001)
+%NM('EvaluateQuadratic','QuadraticGradient','QuadraticHessian',[Q,b], xo,
+%eta)
 %toc
 tic
-LimBFGS(fn,grad,xo, 0.000001,8)
+CGFR(fn,grad,xo, eta)
+toc
+tic
+CGPR(fn,grad,xo, eta)
+toc
+tic
+BFGS(fn,grad,xo, eta)
+toc
+tic
+LimBFGS(fn,grad,xo, eta,5) % memory 
 toc

@@ -28,6 +28,6 @@ while norm(gk) > eps
     Hk = Hkp1;
     errs(iter) = norm(gk);
 end
-plot (errs);
+plot (log(errs));
 xk
 hold off

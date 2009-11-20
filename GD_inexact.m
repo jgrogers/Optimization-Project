@@ -19,6 +19,6 @@ while norm(gk) > eps
     iter = iter + 1;
     errs(iter)= norm(gk);
 end
-plot(errs);
+plot(log(errs));
 xk
 hold off
