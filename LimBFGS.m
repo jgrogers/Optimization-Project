@@ -1,39 +1,23 @@
-function iter = LimBFGS(fn, grad, x0, eps)
+function iter = LimBFGS(fn, grad, x0, eps,m)
 %  Method stores history of 5 vectors
-figure(4)
+figure(5)
 title (sprintf('Limited Memory-BFGS - %s',fn));
 
 hold on
-m = 5;
+[width,height] = size(x0);
 
 fk = feval(fn, x0);
 gk = feval(grad, x0);
 xk = x0;
-
 u0 = gk;
 iter = 1;
-[width,height] = size(x0);
 H0 = eye(width,width);
-Hk = H0;
 %Initialize memory variables
- Vkm5 = 0;
- Vkm4 = 0;
- Vkm3 = 0;
- Vkm2 = 0;
- Vkm1 = 0;
- Vk = 0;
- pkm5 = 1;
- pkm4 = 1;
- pkm3 = 1;
- pkm2 = 1;
- pkm1 = 1;
- pk = 1;
- qkm5 = 1;
- qkm4 = 1;
- qkm3 = 1;
- qkm2 = 1;
- qkm1 = 1;
- qk = 1;
+rhos = zeros(1, m);
+ys = zeros(width,m);
+ss = zeros(width,m);
+Vs = zeros(width,width,m);
+Hk = H0;
 while norm(gk) > eps
     errs(iter) = norm(gk);
     dk = -1 * Hk * gk;
@@ -41,37 +25,38 @@ while norm(gk) > eps
     xkp1 = xk + alpha*dk;
     gkp1 = feval(grad, xkp1);
     fkp1 = feval(fn, xkp1);
-
+    sk = xkp1 - xk;
+    yk = gkp1 - gk;
+    ys = cat(2,yk,ys(:,1:m-1));
+    ss = cat(2,sk,ss(:,1:m-1));
+    rhok = 1 / (yk'*sk);
+    rhos = cat(2,rhok,rhos(1:m-1));
+    Vk = eye(width,width) - rhok * yk * sk';
     %Store previous Vks
-    Vkm5 = Vkm4;
-    Vkm4 = Vkm3;
-    Vkm3 = Vkm2;
-    Vkm2 = Vkm1;
-    Vkm1 = Vk;
-    %Store previous qks
-    qkm5 = qkm4;
-    qkm4 = qkm3;
-    qkm3 = qkm2;
-    qkm2 = qkm1;
-    qkm1 = qk;
-    %Store previous pks
-    pkm5 = pkm4;
-    pkm4 = pkm3;
-    pkm3 = pkm2;
-    pkm2 = pkm1;
-    pkm1 = pk;
+    Vs = cat(3, Vk, Vs(:,:,1:m-1));
+    
+    %there is a problem that it is only looking at the old qk, vk, pk
+    mhat = min(m-1, iter);
+    V1 = eye(width,width);
+    V2 = eye(width,width);
+    for (i = 1:mhat) 
+       V1 = V1 * Vs(:,:,i)';
+       V2 = Vs(:,:,i) * V2;
+    end
+    Hkp1 = V1 * H0 * V2;
 
-    pk = xkp1 - xk;
-    qk = gkp1 - gk;
-    Vk = eye(width, width) - (qk*pk')/(qk'*pk);
+    for i=1:mhat 
+        V1 = eye(width,width);
+        V2 = eye(width,width);
+        for (j = 1:i-1) 
+           V1 = V1 * Vs(:,:,i)';
+           V2 = Vs(:,:,i) * V2;
+        end
+        add_me = rhos(i) * V1 * ss(i)*ss(i)'*V2;
+        Hkp1 = Hkp1 + add_me;
+    end;
     
-    Hkp1 = (Vk'*Vkm1'*Vkm2'*Vkm3'*Vkm4')*H0*(Vkm4*Vkm3*Vkm2*Vkm1*Vk);
-    Hkp1 = Hkp1 + (1/(qkm4'*pkm4))*(Vk'*Vkm1'*Vkm2'*Vkm3')*(qkm4*qkm4')*(Vkm3*Vkm2*Vkm1*Vk);
-    Hkp1 = Hkp1 + (1/(qkm3'*pkm3))*(Vk'*Vkm1'*Vkm2')*(qkm3*qkm3')*(Vkm2*Vkm1*Vk);
-    Hkp1 = Hkp1 + (1/(qkm2'*pkm2))*(Vk'*Vkm1')*(qkm2*qkm2')*(Vkm1*Vk);
-    Hkp1 = Hkp1 + (1/(qkm1'*pkm1))*(Vk')*(qkm1*qkm1')*(Vk); 
-    Hkp1 = Hkp1 + (1/(qk'*pk))*(qk*qk');
-    
+    %pass everything to next iteration
     Hk = Hkp1;
     xk = xkp1;
     gk = gkp1;
@@ -79,6 +64,6 @@ while norm(gk) > eps
     iter = iter + 1;
 end
 
-%plot(errs);
+plot(errs);
 xk
 hold off
